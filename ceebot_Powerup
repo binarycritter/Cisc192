@@ -10,6 +10,7 @@ if ((i == 0) || ( i == 2) || i == 3))
 turn(90);
 grab();
 turn(90);
+drop();
 turn(180);
 grab();
 turn(90);
