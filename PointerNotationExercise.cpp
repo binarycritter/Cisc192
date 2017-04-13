@@ -71,5 +71,6 @@ int main()
 	char c;
 	std::cout << "Please Press any key and <ENTER> to continue... " << std::endl;
 	std::cin >> c;
+	delete [] gradeScores;
 	return 0;
 }//end of main
