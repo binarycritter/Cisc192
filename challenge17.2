@@ -1,0 +1,233 @@
+/*Main.cpp*/
+#include <cstdlib>
+#include <iostream>
+#include <ctype.h>
+#include "List.H"
+using namespace std;
+
+int main()
+{
+	bool menuSelection = true; // used for addNode, deleteNode
+	bool menuLoopCondition = true;
+	int menuVariable;
+	int listInput;
+	List ChrisList;
+	List MenuInvoke;
+
+	
+	char userInput;//user input for selection, either 'y' for yes or 'n' for no
+	char userInputedYes = 'y';//char variable used to continue the menu selection
+	char userInputedNo = 'n';//char variable used to exit each menu selection
+while(menuLoopCondition)
+{ 
+	menuVariable = MenuInvoke.menu();
+	switch (menuVariable)
+	{
+		case 1://add
+			do
+			{ 
+				
+				cout << "Type in 'y' if you want to add an integer to the list, or 'n' if you don't  " << endl;
+					if (userInput == 'y' || userInput == 'n')
+					{ 
+						cin >> userInput;
+						if(userInput == 'y')
+						{
+							cout << "Please enter the integer you wish to add to the list: ";
+							cin >> listInput;
+							ChrisList.AddNode(listInput);
+
+						}
+						else if(userInput == 'n')
+						{
+							menuSelection = false;
+						}
+					}
+					else
+					{
+						cout << "Type in 'y' if you want to add an integer to the list, or 'n' if you don't  " << endl;
+					}
+				
+			} while (menuSelection = true);
+			break;
+
+		case 2://delete
+			do
+			{
+
+				cout << "Type in 'y' if you want to delete an integer from the list, or 'n' if you don't  " << endl;
+				if (userInput == 'y' || userInput == 'n')
+				{
+					cin >> userInput;
+					if (userInput == 'y')
+					{
+						cout << "Please enter the integer you wish to delete from the list: ";
+						cin >> listInput;
+						ChrisList.DeleteNode(listInput);
+
+					}
+					else if (userInput == 'n')
+					{
+						menuSelection = false;
+					}
+				}
+				else
+				{
+					cout << "Type in 'y' if you want to delete an integer from the list, or 'n' if you don't  " << endl;
+				}
+
+			} while (menuSelection = true);
+			break;
+		
+		case 3://print
+			ChrisList.PrintList();
+			break;
+		
+		case 4:
+			menuLoopCondition = false;
+			break;
+
+	}//end of Switch(menuVariable case 4 selected to set menuLoopCondition to false)
+}//end of While(menuLoopCondition is set to false)
+	
+   
+	char c;
+	cout << "Please Press any key and <ENTER> to continue... " << endl;
+	cin >> c;
+
+	return 0;
+}
+
+/*List.cpp*/
+#include <cstdlib>
+#include <iostream>
+#include "List.h"
+
+using namespace std;
+
+ List::List(void)
+{
+	head = NULL;
+	current = NULL;
+	tail = NULL;
+}
+
+
+
+//AddNode member function implementation
+void List::AddNode(int addData)
+{
+	nodePtr theNewNode = new node;
+	theNewNode->next = NULL;
+	theNewNode->data = addData;
+
+	if (head != NULL)
+	{
+		// take the current pointer we are working with and make it point it to the same thing that the head pointer is pointing to	
+		current = head;
+		// to check if we are at the end of the list or not
+		while (current->next != NULL)
+		{
+	//make the current pointer point to the next node in the list
+			current = current->next;
+		}
+		current->next = theNewNode;
+	}
+	else
+	{
+		head = theNewNode;
+	}
+}//end of AddNode fucntion
+
+void List::DeleteNode(int delData)
+{
+	nodePtr delPtr = NULL;
+	tail = head;
+	current = head;
+	
+	while (current != NULL && current->data != delData)
+	{
+		//traverse the list
+		tail = current;
+		current = current->next;
+	}
+	if (current == NULL)
+	{
+		cout << delData << "was not found in the list" << endl;
+		delete delPtr; //c++ makes you take out the garbage, java does it for you lol
+	}
+	else
+	{
+		delPtr = current;//pointing to the node we are about to delete
+		current = current->next;
+		tail->next = current;//connects the list
+		
+		if (delPtr == head)
+		{
+			head = head->next;
+			tail = NULL;
+
+		}
+		
+		delete delPtr;
+		cout << "The value " << delData << " was deleted" << endl;
+	}
+}//end of DeleteNode
+
+void List::PrintList()
+{
+	//pretty straightforward... just a print
+	current = head;
+	while (current != NULL)
+	{
+		cout << current->data << endl;
+		current = current->next;
+	}
+}//end of PrintList
+
+int menu(void)
+{
+	int menuSelection;
+
+	cout << "________Menu________ " << endl;
+	cout << "1. Add an item." << endl;
+	cout << "2. Remove an item." << endl;
+	cout << "3. Print the list." << endl;
+	cout << "Exit" << endl;
+
+	cin >> menuSelection;
+
+	return menuSelection;
+}
+
+/*List.h*/
+#ifndef LIST_H
+#define LIST_H
+
+class List
+{
+private:
+	typedef struct node
+	{
+		int data;
+		node* next;
+
+	}*nodePtr;
+
+
+
+	nodePtr head;
+	nodePtr current;
+	nodePtr tail;
+
+
+public:
+	List();
+
+	void AddNode(int addData); //AddNode member function, and definition 
+	void DeleteNode(int delData); //DeleteNode member function, and definition
+	void PrintList(); //PrintList member function, and definition
+	int menu();
+};
+
+#endif /* LIST_H */
